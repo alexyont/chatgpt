@@ -70,9 +70,10 @@ def get_reply(inputStr):
     except requests.exceptions.HTTPError as errh:
         print("HTTP Error") 
         print(errh.args[0])  
-        reply = "發生錯誤"
+        reply = "HTTP Error 發生錯誤"
     except Exception as err: 
-        print(err)    
+        print(err)   
+        reply = str(err)
 
     return reply
 

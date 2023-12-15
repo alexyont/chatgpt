@@ -47,7 +47,7 @@ def put_training_data():
     return reply
 
 def get_reply(inputStr):
-    print("get_reply") 
+    print("get_reply:"+inputStr) 
     try:
         response = requests.post("https://api.openai.com/v1/chat/completions",
             headers = {
@@ -63,17 +63,17 @@ def get_reply(inputStr):
         responseDict = response.json()
         print(responseDict)
         reply = ""
-        id=responseDict["id"]
+        #id=responseDict["id"]
         for message in responseDict["choices"]:
             reply += message["message"]["content"]
-            put_excel(id, inputStr,message["message"]["content"])
+            #put_excel(id, inputStr,message["message"]["content"])
     except requests.exceptions.HTTPError as errh:
         print("HTTP Error") 
         print(errh.args[0])  
         reply = "HTTP Error 發生錯誤"
     except Exception as err: 
         print(err)   
-        reply = str(err)
+        reply = "ERR:"+str(err)
 
     return reply
 

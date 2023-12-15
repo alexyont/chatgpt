@@ -47,6 +47,7 @@ def put_training_data():
     return reply
 
 def get_reply(inputStr):
+    print("get_reply") 
     try:
         response = requests.post("https://api.openai.com/v1/chat/completions",
             headers = {
@@ -70,6 +71,8 @@ def get_reply(inputStr):
         print("HTTP Error") 
         print(errh.args[0])  
         reply = "發生錯誤"
+    except Exception as err: 
+        print(err)    
 
     return reply
 

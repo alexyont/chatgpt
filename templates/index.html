@@ -44,7 +44,7 @@
             document.getElementById('response').value += "USER->"+inputString + '\n';
 
             // 發送 POST 請求到 Flask Web 服務
-            fetch('http://127.0.0.1:5000/reply', {
+            fetch('https://chatgpt-webservice-dph4.onrender.com/reply', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

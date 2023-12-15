@@ -66,7 +66,9 @@ def get_reply(inputStr):
         for message in responseDict["choices"]:
             reply += message["message"]["content"]
             put_excel(id, inputStr,message["message"]["content"])
-    except: 
+    except requests.exceptions.HTTPError as errh:
+        print("HTTP Error") 
+        print(errh.args[0])  
         reply = "發生錯誤"
 
     return reply

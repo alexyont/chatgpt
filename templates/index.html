@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Web Service Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="mb-3">
+        <textarea class="form-control" id="response" name="response" style="resize: none;" rows="1" readonly></textarea>
+    </div>
+    <div class="mb-3"> 
+        <input class="form-control" type="text" id="inputString" onkeypress="pressEnter()"  placeholder="輸入文字 按下ENTER送出" aria-label="輸入文字">
+    </div>
+
+    <script>
+        const textarea = document.getElementById('response');
+
+        const initialRows = 1;
+        textarea.rows = initialRows;
+
+        function adjustTextareaRows() {
+            const windowHeight = window.innerHeight;
+            const textareaTop = textarea.getBoundingClientRect().top;
+            const newRows = Math.floor((windowHeight - textareaTop) / 29); 
+            textarea.rows = newRows > initialRows ? newRows : initialRows;
+        }
+
+         adjustTextareaRows();
+        window.addEventListener('resize', adjustTextareaRows);
+
+        function pressEnter() {
+            if (event.keyCode === 13) {
+                sendRequest();
+                var inputString = document.getElementById('inputString')
+                inputString.value = "";
+            }
+        }
+        function sendRequest() {
+            // 取得輸入框的值
+            var inputString = document.getElementById('inputString').value;
+            document.getElementById('response').value += "USER->"+inputString + '\n';
+
+            // 發送 POST 請求到 Flask Web 服務
+            fetch('http://127.0.0.1:5000/reply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify({ 'input_string': inputString })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 顯示回應在 HTM
+                document.getElementById('response').value += "AI  ->"+data.result + '\n';
+                var response = document.getElementById('response');
+                response.scroll({top: response.scrollHeight, letf:0, behavior:"smooth"})
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

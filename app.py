@@ -6,7 +6,7 @@ import logging
 import os
 
 _MODEL = "gpt-3.5-turbo"
-_API_KEY = os.getenv("OPENAP_API_KEY")
+_API_KEY = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__, template_folder='templates')
 CORS(app)

@@ -3,9 +3,10 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import logging
+import os
 
 _MODEL = "gpt-3.5-turbo"
-_API_KEY = "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"
+_API_KEY = os.getenv("OPENAP_API_KEY")
 
 app = Flask(__name__, template_folder='templates')
 CORS(app)

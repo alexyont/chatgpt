@@ -19,6 +19,7 @@ dev_logger.addHandler(handler)
 
 def get_reply(inputStr):
     dev_logger.info("get_reply:"+inputStr) 
+    dev_logger.info("_API_KEY:"+_API_KEY) 
     try:
         response = requests.post("https://api.openai.com/v1/chat/completions",
             headers = {
@@ -43,8 +44,9 @@ def get_reply(inputStr):
         dev_logger.error(errh.args[0])  
         reply = "HTTP Error 發生錯誤"
     except Exception as err: 
-        dev_logger.error(err)   
-        reply = "ERR:"+str(err)
+        dev_logger.error("Exception Error")  
+        dev_logger.error(err.args[0])    
+        reply = "ERR:"
 
     return reply
 

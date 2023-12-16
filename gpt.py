@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
+import logging
 
 #_MODEL = "gpt-3.5-turbo"
 _MODEL = "ft:gpt-3.5-turbo-0613:personal::8MBzgoJJ"

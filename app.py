@@ -68,6 +68,8 @@ def reply():
         print("錯誤")
         reply = jsonify({'error': 'Missing input_string parameter'}), 400
 
+    return reply
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")

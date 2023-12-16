@@ -5,7 +5,7 @@ from flask_cors import CORS
 import logging
 
 _MODEL = "gpt-3.5-turbo"
-_API_KEY = "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"
+_API_KEY = "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"
 
 app = Flask(__name__, template_folder='templates')
 CORS(app)

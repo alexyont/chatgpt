@@ -4,51 +4,20 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import logging
 
-#_MODEL = "gpt-3.5-turbo"
-_MODEL = "ft:gpt-3.5-turbo-0613:personal::8MBzgoJJ"
-_API_KEY = "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"
+_MODEL = "gpt-3.5-turbo"
+_API_KEY = "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"
 
 app = Flask(__name__, template_folder='templates')
 CORS(app)
 
-def put_excel(id, question, answer):
-    url = 'https://script.google.com/macros/s/AKfycby2ttK4bJWPWtz6B_re4yzu_gt93VZS1ynHjae_Bq_M8oRqd1r0h0nZM9qZ9kd6e8PMRA/exec'
+dev_logger: logging.Logger = logging.getLogger(name='dev')
+dev_logger.setLevel(logging.INFO)
 
-    params = {
-        'name':'工作表1',
-        'data':'["'+id+'","'+question+'","'+answer.replace("\n", " ").replace("'", " ").replace('"', ' ')+'","'+datetime.now().strftime('%Y-%m-%d %H:%M:%S')+'"]'
-    }
-
-    web = requests.get(url=url, params=params)
-
-    return web
-
-def put_training_data():
-    try:
-        file_path = 'traning_data.txt'  
-        with open(file_path, 'r', encoding='utf-8') as file:
-            file_content = file.read()
-
-        response = requests.post("https://api.openai.com/v1/chat/completions",
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + _API_KEY
-            },
-            json = {
-                "model":_MODEL,
-                "messages":[{"role":"system","content":file_content}]
-            }
-        )
-
-        responseDict = response.json()
-        print(responseDict)
-    except: 
-        print("發生錯誤")
-
-    return reply
+handler: logging.StreamHandler = logging.StreamHandler()
+dev_logger.addHandler(handler)
 
 def get_reply(inputStr):
-    print("get_reply:"+inputStr) 
+    dev_logger.info("get_reply:"+inputStr) 
     try:
         response = requests.post("https://api.openai.com/v1/chat/completions",
             headers = {
@@ -62,18 +31,18 @@ def get_reply(inputStr):
         )
 
         responseDict = response.json()
-        print(responseDict)
+        dev_logger.info(responseDict)
         reply = ""
         #id=responseDict["id"]
         for message in responseDict["choices"]:
             reply += message["message"]["content"]
             #put_excel(id, inputStr,message["message"]["content"])
     except requests.exceptions.HTTPError as errh:
-        print("HTTP Error") 
-        print(errh.args[0])  
+        dev_logger.error("HTTP Error") 
+        dev_logger.error(errh.args[0])  
         reply = "HTTP Error 發生錯誤"
     except Exception as err: 
-        print(err)   
+        dev_logger.error(err)   
         reply = "ERR:"+str(err)
 
     return reply
@@ -98,7 +67,6 @@ def reply():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    put_training_data()
     return render_template("index.html")
 
 

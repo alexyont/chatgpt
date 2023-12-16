@@ -19,7 +19,6 @@ dev_logger.addHandler(handler)
 
 def get_reply(inputStr):
     dev_logger.info("get_reply:"+inputStr) 
-    dev_logger.info("_API_KEY:"+_API_KEY) 
     try:
         response = requests.post("https://api.openai.com/v1/chat/completions",
             headers = {
